@@ -1,0 +1,11 @@
+[project]
+name = "audioawol"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dvc>=3.59.2",
+    "torch>=2.7.0",
+    "wandb>=0.19.11",
+]

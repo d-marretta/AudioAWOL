@@ -8,5 +8,6 @@ dependencies = [
     "dvc>=3.59.2",
     "dvc-gdrive>=3.0.1",
     "torch>=2.7.0",
+    "transformers>=4.55.0",
     "wandb>=0.19.11",
 ]

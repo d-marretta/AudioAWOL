@@ -58,5 +58,5 @@ def generate_labels(data_path):
 
 
 if __name__ == '__main__':
-    #group_by_techniques('./data')
+    group_by_techniques('./data')
     generate_labels('./data')

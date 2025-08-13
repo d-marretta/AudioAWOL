@@ -5,8 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "ddsp>=3.6.0",
     "dvc>=3.59.2",
     "dvc-gdrive>=3.0.1",
+    "gin-config>=0.5.0",
+    "tensorflow>=2.11.1",
+    "tensorflow-probability==0.11.0",
     "torch>=2.7.0",
     "transformers>=4.55.0",
     "wandb>=0.19.11",

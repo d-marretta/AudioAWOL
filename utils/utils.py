@@ -1,3 +1,5 @@
+import torch
+
 NOTES_FLAT = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 NOTES_SHARP = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 DYNAMICS = {'pp': 'pianissimo',
@@ -39,3 +41,16 @@ def technique_abbr_to_full(abbr):
         return 'tremolo'
     elif 'pizz' in abbr:
         return 'pizzicato'
+
+
+def load_embedding_pt(path):
+    embedding = torch.load(path, map_location="cpu")    
+    return embedding
+
+
+def split_embedding(embedding, n_frames):
+    n = n_frames
+    f0_hz = embedding[0:n]
+    f0_conf = embedding[n:2*n]
+    loudness_db = embedding[2*n:3*n]
+    return f0_hz, f0_conf, loudness_db

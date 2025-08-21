@@ -1,5 +1,9 @@
-DDSP_MODEL_DIR: "./models/ddsp"
+DATASET_PATH: "./data"
+
+DDSP_MODEL_PATH: "./models/ddsp"
 DDSP_SAMPLE_RATE: 16000
-DATASET_DIR: "./data"
+
 PCA_PATH: "./models/pca"
 PCA_COMPONENTS: 64
+
+REALNVP_PATH: "./models/real_nvp"

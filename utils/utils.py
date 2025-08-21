@@ -49,8 +49,22 @@ def load_embedding_pt(path):
 
 
 def split_embedding(embedding, n_frames):
-    n = n_frames
-    f0_hz = embedding[0:n]
-    f0_conf = embedding[n:2*n]
-    loudness_db = embedding[2*n:3*n]
+    f0_hz = embedding[0:n_frames]
+    f0_conf = embedding[n_frames:2*n_frames]
+    loudness_db = embedding[2*n_frames:3*n_frames]
     return f0_hz, f0_conf, loudness_db
+
+def pad_embedding(embedding, n_frames):
+    f0_hz, f0_conf, loudness_db = split_embedding(embedding, embedding.shape[0]//3)
+
+    padding_needed = n_frames - len(f0_hz)
+    f0_pad = torch.zeros(padding_needed)
+    loudness_pad = torch.tensor([-80]*padding_needed)
+
+    f0_hz, f0_conf, loudness_db = torch.concat((f0_hz, f0_pad)), \
+                                    torch.concat((f0_conf, f0_pad)), \
+                                    torch.concat((loudness_db, loudness_pad))
+    x = torch.concat((f0_hz, f0_conf, loudness_db))
+
+    return x
+

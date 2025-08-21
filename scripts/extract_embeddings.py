@@ -5,15 +5,9 @@ import ddsp
 import ddsp.training
 import warnings
 import yaml
-import tensorflow as tf
 import soundfile as sf
 import numpy as np
 import librosa
-import gin
-from sklearn.decomposition import PCA
-import joblib
-from utils.utils import load_embedding_pt
-from src.inference import generate_audio_from_features, load_ddsp
 
 def get_labels(labels_path):
     # Get list of file names and labels
@@ -90,9 +84,10 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore", message="divide by zero encountered in log10")
     
     with open('./configs/config.yaml', mode='r') as config_file:
-        config = yaml.load(config_file, yaml.Loader)
-    ddsp_path = config['DDSP_MODEL_DIR']
-    data_path = config['DATASET_DIR']
+        config = yaml.safe_load(config_file)
+
+    ddsp_path = config['DDSP_MODEL_PATH']
+    data_path = config['DATASET_PATH']
     sample_rate = config['DDSP_SAMPLE_RATE']
     get_text_embeddings(data_path)
     get_audio_embeddings(data_path, sample_rate)

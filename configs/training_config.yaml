@@ -1,0 +1,10 @@
+batch_size: 16
+input_dim: 64
+cond_dim: 512
+num_blocks: 5
+hidden_dim: 1024
+mask_conditioning: False
+eps: 0.000001
+learning_rate: 0.0001
+epochs: 1000
+

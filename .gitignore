@@ -12,3 +12,5 @@ wheels/
 # Dataset
 data/
 /data
+backup/
+data.zip

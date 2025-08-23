@@ -35,12 +35,12 @@ def load_pca(pca_path):
     return pca
 
 def apply_pca(x, pca):
-    z = pca.transform(x.numpy())
-    return torch.from_numpy(z).float()
+    z = pca.transform(x.numpy().reshape(1,-1))
+    return torch.from_numpy(z.squeeze(0)).float()
 
 def inverse_pca(z, pca):
-    x_recon = pca.inverse_transform(z.numpy())
-    return torch.from_numpy(x_recon).float()
+    x_recon = pca.inverse_transform(z.numpy().reshape(1, -1))  
+    return torch.from_numpy(x_recon.squeeze(0)).float()
 
 
 if __name__ == '__main__':

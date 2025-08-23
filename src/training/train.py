@@ -20,7 +20,7 @@ def main():
     os.makedirs(f"{model_path}/checkpoints", exist_ok=True)
 
     # Get data
-    dataset = AudioAWOLDataset(config['DATASET_DIR'], config['PCA_PATH'])
+    dataset = AudioAWOLDataset(config['DATASET_PATH'], config['PCA_PATH'], config['DDSP_FRAMES'])
     train_data, val_data, test_data = random_split(dataset, [0.8, 0.1, 0.1])
     train_dataloader = DataLoader(dataset=train_data, batch_size=training_conf['batch_size'], shuffle=True)
     val_dataloader = DataLoader(dataset=val_data, batch_size=training_conf['batch_size'], shuffle=False)
@@ -42,9 +42,9 @@ def main():
                                           monitor='val_loss',
                                           mode='min')
     trainer = L.Trainer(
-        max_epochs=config["epochs"],
+        max_epochs=training_conf["epochs"],
         accelerator="gpu" if torch.cuda.is_available() else "cpu",
-        devices=[config["gpu_id"]] if torch.cuda.is_available() else "auto",
+        devices="auto",
         logger=wandb_logger,
         callbacks=[early_stopping_cb,model_checkpoint_cb]
     )

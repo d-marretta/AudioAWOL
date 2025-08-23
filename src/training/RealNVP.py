@@ -57,8 +57,8 @@ class BatchNormFlow(nn.Module):
         
         else:
             if self.training:
-                mean = self.batch_mean
-                var = self.batch_var
+                mean = getattr(self, "batch_mean", self.running_mean)
+                var  = getattr(self, "batch_var", self.running_var)
             else:
                 mean = self.running_mean
                 var = self.running_var
@@ -95,6 +95,7 @@ class CouplingLayer(nn.Module):
 
         self.apply(self.init)
 
+    @staticmethod
     def init(m):
         if isinstance(m, nn.Linear):
             nn.init.orthogonal_(m.weight)
@@ -189,25 +190,29 @@ class RealNVPLightning(L.LightningModule):
         )
         return opt
 
-    def training_step(self, batch):
-        gts = batch[:, 1]
-        conds = batch[:, 0]
+    def training_step(self, batch, batch_idx):
+        conds, gts = batch
 
-        pred_params = self.model.sample(num_samples = gts.shape[0], cond_inputs = conds)
+        pred_params = self.model.sample(num_samples = gts.shape[0], cond = conds)
         loss = F.l1_loss(pred_params, gts)
 
-        self.log("train/loss", loss, prog_bar=True, on_step=True, on_epoch=True)
+        self.log("train_loss", loss, prog_bar=True, on_step=True, on_epoch=True)
 
         return loss
 
-    def validation_step(self, batch):
-        gt = batch["gt_audio_embeddings"].float()
-        cond = batch["text_embeddings"].float()
+    def validation_step(self, batch, batch_idx):
+        conds, gts = batch
 
-        pred_params = self.model.sample(num_samples=gt.shape[0], cond_inputs=cond)
+        pred_params = self.model.sample(num_samples=gts.shape[0], cond=conds)
+        loss = F.l1_loss(pred_params, gts)
 
-        loss = F.l1_loss(pred_params, gt)
+        self.log("val_loss", loss, prog_bar=True, on_step=False, on_epoch=True)
 
-        self.log("val/loss", loss, prog_bar=True, on_step=False, on_epoch=True)
-
+        return loss
+    
+    def test_step(self, batch, batch_idx):
+        conds, gts = batch
+        pred_params = self.model.sample(num_samples=gts.shape[0], cond=conds)
+        loss = F.l1_loss(pred_params, gts)
+        self.log("test_loss", loss, prog_bar=True, on_epoch=True)
         return loss

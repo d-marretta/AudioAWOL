@@ -2,6 +2,7 @@ DATASET_PATH: "./data"
 
 DDSP_MODEL_PATH: "./models/ddsp"
 DDSP_SAMPLE_RATE: 16000
+DDSP_FRAMES: 250
 
 PCA_PATH: "./models/pca"
 PCA_COMPONENTS: 64
